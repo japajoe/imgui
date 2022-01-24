@@ -7,4 +7,4 @@ Since ImGui relies on a graphics back-end, I have chosen to include the source o
 
 I did add a agnostic windowing library back-end so you can use any windowing library you prefer, provided you implement all needed callbacks yourself. I have tested this with SDL and GTK, but there's no reason you can't use GLFW or any other library of your choice. See imgui_impl_custom.cpp to get an idea of what to implement.
 
-Before you can use any of the functionality, you should call GLInitGlew. I'll soon add an example of how to use this library in C# with OpenTK and SDL. If you have questions, please open an issue and I'll get back at you.
+For a working example see https://github.com/japajoe/SkylineEngine (specifically https://github.com/japajoe/SkylineEngine/blob/main/DearImGui/ImGuiControl.cs and https://github.com/japajoe/SkylineEngine/blob/main/SkylineEngine/Application.cs).
