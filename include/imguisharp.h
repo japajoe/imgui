@@ -23,7 +23,7 @@ extern "C"
     extern void ImGui_Render();
     extern void ImGui_DestroyContext();
 
-    extern bool ImGuiBegin(const char* id, bool* active, int flags);
+    extern bool ImGuiBegin(const char* id, bool* active, ImGuiWindowFlags flags);
     extern void ImGuiEnd();
     extern void ImGuiSetNextWindowPos(float x, float y);
     extern void ImGuiSetNextWindowSize(float x, float y);
@@ -39,14 +39,21 @@ extern "C"
     extern void ImGuiText(const char* text);
     extern bool ImGuiButton(const char* text, const ImVec2& rect);
     extern bool ImGuiImageButton(int textureId, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_col);
-    extern bool ImGuiInputFloat(const char* label, float* value, float step, float step_fast, const char* format, int flags);
     extern bool ImGuiSliderFloat(const char* label, float* value, float v_min, float v_max, const char* format, float power);
-    extern bool ImGuiInputFloat3(const char* label, float* value, int decimal_precision, int flags);
-    extern bool ImGuiColorEdit3(const char* label, float* color, int flags);
-    extern bool ImGuiColorEdit4(const char* label, float* color, int flags);
+    extern bool ImGuiInputFloat(const char* label, float* value, float step, float step_fast, const char* format, ImGuiInputTextFlags flags);
+    extern bool ImGuiInputFloat2(const char* label, float* value, int decimal_precision, ImGuiInputTextFlags flags);
+    extern bool ImGuiInputFloat3(const char* label, float* value, int decimal_precision, ImGuiInputTextFlags flags);
+    extern bool ImGuiInputFloat4(const char* label, float* value, int decimal_precision, ImGuiInputTextFlags flags);
+    extern bool ImGuiInputDouble(const char* label, double* value, double step, double step_fast, const char* format, ImGuiInputTextFlags flags);
+    extern bool ImGuiInputInt(const char* label, int* value, double step, double step_fast, const char* format, ImGuiInputTextFlags flags);
+    extern bool ImGuiInputInt2(const char* label, int* value, ImGuiInputTextFlags flags);
+    extern bool ImGuiInputInt3(const char* label, int* value, ImGuiInputTextFlags flags);
+    extern bool ImGuiInputInt4(const char* label, int* value, ImGuiInputTextFlags flags);
+    extern bool ImGuiColorEdit3(const char* label, float* color, ImGuiColorEditFlags flags);
+    extern bool ImGuiColorEdit4(const char* label, float* color, ImGuiColorEditFlags flags);
     extern void ImGuiImage(int textureId, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, const ImVec4& tint_col, const ImVec4& border_col);
-    extern bool ImGuiInputText(const char* label, char* str, int bufferSize, int flags, ImGuiInputTextCallback callback, void* user_data);
-    extern bool ImGuiInputTextMultiline(const char* label, char* str, int bufferSize, const ImVec2& size, int flags, ImGuiInputTextCallback callback, void* user_data);
+    extern bool ImGuiInputText(const char* label, char* str, int bufferSize, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data);
+    extern bool ImGuiInputTextMultiline(const char* label, char* str, int bufferSize, const ImVec2& size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data);
     extern void ImGuiPlotLines(const char* label, const float* values, int values_count, int values_offset = 0);
     extern void ImGuiProgressBar(float progress, const ImVec2& size_arg = ImVec2(-1,0), const char* overlay = NULL);
     extern void ImGuiProgressBarWithoutLabel(float progress, const ImVec2& size_arg = ImVec2(-1,0));

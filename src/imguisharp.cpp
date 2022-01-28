@@ -65,7 +65,7 @@ extern "C" void ImGui_DestroyContext()
     ImGui::DestroyContext();
 }
 
-extern "C" bool ImGuiBegin(const char* id, bool* active, int flags)
+extern "C" bool ImGuiBegin(const char* id, bool* active, ImGuiWindowFlags flags)
 {
     return ImGui::Begin(id, active, flags);
 }
@@ -145,34 +145,67 @@ extern "C" bool ImGuiImageButton(int textureId, const ImVec2& size, const ImVec2
     return ImGui::ImageButton((void*)(intptr_t)textureId, size, uv0, uv1, frame_padding, bg_col, tint_col);
 }
 
-extern "C" bool ImGuiInputFloat(const char* label, float* value, float step, float step_fast, const char* format, int flags)
-{
-    ImGuiInputTextFlags f = static_cast<ImGuiInputTextFlags>(flags);
-    return ImGui::InputFloat(label, value, step, step_fast, format, f);
-}
-
 extern "C" bool ImGuiSliderFloat(const char* label, float* value, float v_min, float v_max, const char* format, float power)
 {
     return ImGui::SliderFloat(label, value, v_min, v_max, format, power);
 }
 
-extern "C" bool ImGuiInputFloat3(const char* label, float* value, int decimal_precision, int flags)
+extern "C" bool ImGuiInputFloat(const char* label, float* value, float step, float step_fast, const char* format, ImGuiInputTextFlags flags)
 {
-    ImGuiInputTextFlags f = static_cast<ImGuiInputTextFlags>(flags);
+    return ImGui::InputFloat(label, value, step, step_fast, format, flags);
+}
+
+extern "C" bool ImGuiInputFloat2(const char* label, float* value, int decimal_precision, ImGuiInputTextFlags flags)
+{
     std::string precision = "%." + std::to_string(decimal_precision) + "f";
-    return ImGui::InputFloat3(label, value, precision.c_str(), f);
+    return ImGui::InputFloat2(label, value, precision.c_str(), flags);
 }
 
-extern "C" bool ImGuiColorEdit3(const char* label, float* color, int flags)
+extern "C" bool ImGuiInputFloat3(const char* label, float* value, int decimal_precision, ImGuiInputTextFlags flags)
 {
-    ImGuiColorEditFlags f = static_cast<ImGuiColorEditFlags>(flags);
-    return ImGui::ColorEdit3(label, color, f);
+    std::string precision = "%." + std::to_string(decimal_precision) + "f";
+    return ImGui::InputFloat3(label, value, precision.c_str(), flags);
 }
 
-extern "C" bool ImGuiColorEdit4(const char* label, float* color, int flags)
+extern "C" bool ImGuiInputFloat4(const char* label, float* value, int decimal_precision, ImGuiInputTextFlags flags)
 {
-    ImGuiColorEditFlags f = static_cast<ImGuiColorEditFlags>(flags);
-    return ImGui::ColorEdit4(label, color, f);
+    std::string precision = "%." + std::to_string(decimal_precision) + "f";
+    return ImGui::InputFloat4(label, value, precision.c_str(), flags);
+}
+
+extern "C" bool ImGuiInputDouble(const char* label, double* value, double step, double step_fast, const char* format, ImGuiInputTextFlags flags)
+{
+    return ImGui::InputDouble(label, value, step, step_fast, format, flags);
+}
+
+extern "C" bool ImGuiInputInt(const char* label, int* value, double step, double step_fast, const char* format, ImGuiInputTextFlags flags)
+{
+    return ImGui::InputInt(label, value, step, step_fast, flags);
+}
+
+extern "C" bool ImGuiInputInt2(const char* label, int* value, ImGuiInputTextFlags flags)
+{
+    return ImGui::InputInt2(label, value, flags);
+}
+
+extern "C" bool ImGuiInputInt3(const char* label, int* value, ImGuiInputTextFlags flags)
+{
+    return ImGui::InputInt3(label, value, flags);
+}
+
+extern "C" bool ImGuiInputInt4(const char* label, int* value, ImGuiInputTextFlags flags)
+{
+    return ImGui::InputInt4(label, value, flags);
+}
+
+extern "C" bool ImGuiColorEdit3(const char* label, float* color, ImGuiColorEditFlags flags)
+{
+    return ImGui::ColorEdit3(label, color, flags);
+}
+
+extern "C" bool ImGuiColorEdit4(const char* label, float* color, ImGuiColorEditFlags flags)
+{
+    return ImGui::ColorEdit4(label, color, flags);
 }
 
 extern "C" void ImGuiImage(int textureId, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, const ImVec4& tint_col, const ImVec4& border_col)
@@ -180,16 +213,14 @@ extern "C" void ImGuiImage(int textureId, const ImVec2& size, const ImVec2& uv0,
     ImGui::Image((void*)(intptr_t)textureId, size, uv0, uv1, tint_col, border_col);
 }
 
-extern "C" bool ImGuiInputText(const char* label, char* str, int bufferSize, int flags, ImGuiInputTextCallback callback, void* user_data)
+extern "C" bool ImGuiInputText(const char* label, char* str, int bufferSize, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
 {
-    ImGuiInputTextFlags f = static_cast<ImGuiInputTextFlags>(flags);
-    return ImGui::InputText(label, str, bufferSize, f,  callback, user_data);
+    return ImGui::InputText(label, str, bufferSize, flags,  callback, user_data);
 }
 
-extern "C" bool ImGuiInputTextMultiline(const char* label, char* str, int bufferSize, const ImVec2& size, int flags, ImGuiInputTextCallback callback, void* user_data)
+extern "C" bool ImGuiInputTextMultiline(const char* label, char* str, int bufferSize, const ImVec2& size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
 {
-    ImGuiInputTextFlags f = static_cast<ImGuiInputTextFlags>(flags);
-    return ImGui::InputTextMultiline(label, str, bufferSize, size, f, callback, user_data);
+    return ImGui::InputTextMultiline(label, str, bufferSize, size, flags, callback, user_data);
 }
 
 extern "C" void ImGuiPlotLines(const char* label, const float* values, int values_count, int values_offset)
