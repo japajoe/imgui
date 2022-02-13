@@ -31,6 +31,8 @@ extern "C"
     extern void ImGuiSetCursorPosX(float x);
     extern void ImGuiPushStyleColor(ImGuiCol idx, const ImVec4& col);
     extern void ImGuiPopStyleColor(int count = 1);
+    extern void ImGuiPushFont(ImFont* font);
+    extern void ImGuiPopFont();
     extern bool ImGuiIsAnyItemActive();
     extern bool ImGuiIsAnyItemFocused();
     extern bool ImGuiIsAnyItemHovered();
@@ -86,6 +88,8 @@ extern "C"
     extern void ImGuiTextUnformatted(const char* text);
     extern void ImGuiTextUnformatted1(const char* text, const char* textEnd);
     extern void ImGuiEndChild();
+    extern bool ImGuiBeginCombo(const char* label, const char* previewValue, ImGuiComboFlags flags);
+    extern void ImGuiEndCombo();
     extern void ImGuiSetStyle(const ImGuiStyle& style);
     extern void ImGuiGetStyle(ImGuiStyle* style);
     extern void ImGuiSetIO(const ImGuiIO& io);

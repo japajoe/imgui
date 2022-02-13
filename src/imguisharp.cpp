@@ -313,6 +313,16 @@ extern "C" void ImGuiPopStyleVar(int count)
     ImGui::PopStyleVar(count);
 }
 
+extern "C" void ImGuiPushFont(ImFont* font)
+{
+    ImGui::PushFont(font);
+}
+
+extern "C" void ImGuiPopFont()
+{
+    ImGui::PopFont();
+}
+
 extern "C" void ImGuiLogToClipboard(int autoOpenDepth)
 {
     ImGui::LogToClipboard(autoOpenDepth);
@@ -381,6 +391,16 @@ extern "C" void ImGuiTextUnformatted1(const char* text, const char* textEnd)
 extern "C" void ImGuiEndChild()
 {
     ImGui::EndChild();
+}
+
+extern "C" bool ImGuiBeginCombo(const char* label, const char* previewValue, ImGuiComboFlags flags)
+{
+    return ImGui::BeginCombo(label, previewValue, flags);
+}
+
+extern "C" void ImGuiEndCombo()
+{
+    ImGui::EndCombo();
 }
 
 extern "C" void ImGuiSetStyle(const ImGuiStyle& style)
