@@ -9,6 +9,7 @@
 #ifndef RESOURCEPACK_HPP
 #define RESOURCEPACK_HPP
 
+#include "librarydefinitions.h"
 #include <vector>
 #include <stdint.h>
 #include <streambuf>
@@ -43,6 +44,7 @@ public:
     std::vector<std::string> ListFiles();	
 	ResultCode RemoveFile(const std::string &sFilename);
 	ResultCode RenameFile(const std::string &src, const std::string &dest);
+    bool FileExistsInMap(const std::string& sFilename);
 private:
     struct sResourceFile { uint32_t nSize; uint32_t nOffset; };
     std::map<std::string, sResourceFile> mapFiles;
@@ -51,22 +53,20 @@ private:
     std::string makeposix(const std::string& path);
 };
 
-extern "C"
-{
-    extern ResourcePack* ResourcePackCreate();
-    extern void ResourcePackDispose(ResourcePack* p);
-    extern void ResourcePackAddFile(ResourcePack* p, const char* sFile);
-    extern void ResourcePackLoadPack(ResourcePack* p, const char* sFile, const char* sKey);
-    extern void ResourcePackSavePack(ResourcePack* p, const char* sFile, const char* sKey);
-    extern bool ResourcePackIsLoaded(ResourcePack* p);
-    extern char** ResourcePackListFiles(ResourcePack* p, int* numFiles);
-    extern void ResourcePackFreeStringArray(char** s, int numStrings);
-    extern ResultCode ResourcePackRemoveFile(ResourcePack* p, const char* sFile);
-    extern ResultCode ResourcePackRenameFile(ResourcePack* p, const char* src, const char* dest);
-    extern ResourceBuffer* ResourcePackFileBufferGet(ResourcePack* p, const char* sFile);
-    extern void ResourcePackFileBufferDispose(ResourceBuffer* b);
-    extern uint32_t ResourcePackFileBufferGetSize(ResourceBuffer* b);
-    extern char* ResourcePackFileBufferGetData(ResourceBuffer* b);
-}
+extern "C" IMGUI_API_EXPORT ResourcePack* ResourcePackCreate();
+extern "C" IMGUI_API_EXPORT void ResourcePackDispose(ResourcePack* p);
+extern "C" IMGUI_API_EXPORT bool ResourcePackAddFile(ResourcePack* p, const char* sFile);
+extern "C" IMGUI_API_EXPORT bool ResourcePackLoadPack(ResourcePack* p, const char* sFile, const char* sKey);
+extern "C" IMGUI_API_EXPORT bool ResourcePackSavePack(ResourcePack* p, const char* sFile, const char* sKey);
+extern "C" IMGUI_API_EXPORT bool ResourcePackIsLoaded(ResourcePack* p);
+extern "C" IMGUI_API_EXPORT char** ResourcePackListFiles(ResourcePack* p, int* numFiles);
+extern "C" IMGUI_API_EXPORT void ResourcePackFreeStringArray(char** s, int numStrings);
+extern "C" IMGUI_API_EXPORT ResultCode ResourcePackRemoveFile(ResourcePack* p, const char* sFile);
+extern "C" IMGUI_API_EXPORT ResultCode ResourcePackRenameFile(ResourcePack* p, const char* src, const char* dest);
+extern "C" IMGUI_API_EXPORT ResourceBuffer* ResourcePackFileBufferGet(ResourcePack* p, const char* sFile);
+extern "C" IMGUI_API_EXPORT bool ResourcePackFileExistsInMap(ResourcePack* p, const char* filename);
+extern "C" IMGUI_API_EXPORT void ResourcePackFileBufferDispose(ResourceBuffer* b);
+extern "C" IMGUI_API_EXPORT uint32_t ResourcePackFileBufferGetSize(ResourceBuffer* b);
+extern "C" IMGUI_API_EXPORT char* ResourcePackFileBufferGetData(ResourceBuffer* b);
 
 #endif

@@ -112,6 +112,7 @@ bool ResourcePack::SavePack(const std::string& sFile, const std::string& sKey)
         ofs.write((char*)&nPathSize, sizeof(uint32_t));
         ofs.write(e.first.c_str(), nPathSize);
 
+
         // Write the file entry properties
         ofs.write((char*)&e.second.nSize, sizeof(uint32_t));
         ofs.write((char*)&e.second.nOffset, sizeof(uint32_t));
@@ -216,7 +217,7 @@ ResultCode ResourcePack::RemoveFile(const std::string &sFilename)
         return ResultCode::FAIL;
     }
 
-    if(FileExists(sFilename))
+    if(FileExistsInMap(sFilename))
     {
         mapFiles.erase(sFilename);
         
@@ -234,7 +235,7 @@ ResultCode ResourcePack::RenameFile(const std::string &src, const std::string &d
     }
 
     // if source exists and destination does not exist, let's move it
-    if(FileExists(src) && !FileExists(dest))
+    if(FileExistsInMap(src) && !FileExistsInMap(dest))
     {
         mapFiles[dest] = mapFiles[src];
         mapFiles.erase(src);
@@ -245,15 +246,31 @@ ResultCode ResourcePack::RenameFile(const std::string &src, const std::string &d
     return ResultCode::NO_FILE;
 }
 
+bool ResourcePack::FileExistsInMap(const std::string& sFilename)
+{
+    if(!Loaded())
+    {
+        return false;
+    }
 
+    for(auto &file : mapFiles)
+    {
+        if(file.first.compare(sFilename) == 0)
+        {
+            return true;
+        }
+    }
 
-extern "C" ResourcePack* ResourcePackCreate()
+    return false;
+}
+
+ResourcePack* ResourcePackCreate()
 {
     ResourcePack* pack = new ResourcePack();
     return pack;
 }
 
-extern "C" void ResourcePackDispose(ResourcePack* p)
+void ResourcePackDispose(ResourcePack* p)
 {
     if(p != nullptr)
     {
@@ -262,31 +279,37 @@ extern "C" void ResourcePackDispose(ResourcePack* p)
     }
 }
 
-extern "C" void ResourcePackAddFile(ResourcePack* p, const char* sFile)
+bool ResourcePackAddFile(ResourcePack* p, const char* sFile)
 {
     if(p != nullptr)
     {
-        p->AddFile(sFile);
+        return p->AddFile(sFile);
     }
+
+    return false;
 }
 
-extern "C" void ResourcePackLoadPack(ResourcePack* p, const char* sFile, const char* sKey)
+bool ResourcePackLoadPack(ResourcePack* p, const char* sFile, const char* sKey)
 {
     if(p != nullptr)
     {
-        p->LoadPack(sFile, sKey);
+        return p->LoadPack(sFile, sKey);
     }
+
+    return false;
 }
 
-extern "C" void ResourcePackSavePack(ResourcePack* p, const char* sFile, const char* sKey)
+bool ResourcePackSavePack(ResourcePack* p, const char* sFile, const char* sKey)
 {
     if(p != nullptr)
     {
-        p->SavePack(sFile, sKey);
+        return p->SavePack(sFile, sKey);
     }
+
+    return false;
 }
 
-extern "C" bool ResourcePackIsLoaded(ResourcePack* p)
+bool ResourcePackIsLoaded(ResourcePack* p)
 {
     if(p != nullptr)
     {
@@ -295,7 +318,7 @@ extern "C" bool ResourcePackIsLoaded(ResourcePack* p)
     return false;
 }
 
-extern "C" char** ResourcePackListFiles(ResourcePack* p, int* numFiles)
+char** ResourcePackListFiles(ResourcePack* p, int* numFiles)
 {
     if(p != nullptr)
     {
@@ -318,7 +341,7 @@ extern "C" char** ResourcePackListFiles(ResourcePack* p, int* numFiles)
     return nullptr;
 }
 
-extern "C" void ResourcePackFreeStringArray(char** s, int numStrings)
+void ResourcePackFreeStringArray(char** s, int numStrings)
 {
     if(s != nullptr)
     {
@@ -331,7 +354,7 @@ extern "C" void ResourcePackFreeStringArray(char** s, int numStrings)
     }
 }
 
-extern "C" ResultCode ResourcePackRemoveFile(ResourcePack* p, const char* sFile)
+ResultCode ResourcePackRemoveFile(ResourcePack* p, const char* sFile)
 {
     if(p != nullptr)
     {
@@ -341,7 +364,7 @@ extern "C" ResultCode ResourcePackRemoveFile(ResourcePack* p, const char* sFile)
     return ResultCode::FAIL;
 }
 
-extern "C" ResultCode ResourcePackRenameFile(ResourcePack* p, const char* src, const char* dest)
+ResultCode ResourcePackRenameFile(ResourcePack* p, const char* src, const char* dest)
 {
     if(p != nullptr)
     {
@@ -351,7 +374,16 @@ extern "C" ResultCode ResourcePackRenameFile(ResourcePack* p, const char* src, c
     return ResultCode::FAIL;
 }
 
-extern "C" ResourceBuffer* ResourcePackFileBufferGet(ResourcePack* p, const char* sFile)
+bool ResourcePackFileExistsInMap(ResourcePack* p, const char* filename)
+{
+    if(p != nullptr)
+    {
+        return p->FileExistsInMap(filename);
+    }
+    return false;
+}
+
+ResourceBuffer* ResourcePackFileBufferGet(ResourcePack* p, const char* sFile)
 {
     if(p != nullptr)
     {
@@ -361,7 +393,7 @@ extern "C" ResourceBuffer* ResourcePackFileBufferGet(ResourcePack* p, const char
     return nullptr;
 }
 
-extern "C" void ResourcePackFileBufferDispose(ResourceBuffer* b)
+void ResourcePackFileBufferDispose(ResourceBuffer* b)
 {
     if(b != nullptr)
     {
@@ -370,7 +402,7 @@ extern "C" void ResourcePackFileBufferDispose(ResourceBuffer* b)
     }
 }
 
-extern "C" uint32_t ResourcePackFileBufferGetSize(ResourceBuffer* b)
+uint32_t ResourcePackFileBufferGetSize(ResourceBuffer* b)
 {
     if(b != nullptr)
     {
@@ -381,7 +413,7 @@ extern "C" uint32_t ResourcePackFileBufferGetSize(ResourceBuffer* b)
     return 0;
 }
 
-extern "C" char* ResourcePackFileBufferGetData(ResourceBuffer* b)
+char* ResourcePackFileBufferGetData(ResourceBuffer* b)
 {
     if(b != nullptr)
     {
