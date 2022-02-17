@@ -15,6 +15,14 @@
 #include <string>
 #include <fstream>
 #include <map>
+#include <vector>
+
+enum class ResultCode 
+{ 
+    FAIL = 0, 
+    OK = 1, 
+    NO_FILE = -1
+};
 
 struct ResourceBuffer : public std::streambuf
 {
@@ -32,6 +40,9 @@ public:
     bool SavePack(const std::string& sFile, const std::string& sKey);
     ResourceBuffer* GetFileBuffer(const std::string& sFile);
     bool Loaded();
+    std::vector<std::string> ListFiles();	
+	ResultCode RemoveFile(const std::string &sFilename);
+	ResultCode RenameFile(const std::string &src, const std::string &dest);
 private:
     struct sResourceFile { uint32_t nSize; uint32_t nOffset; };
     std::map<std::string, sResourceFile> mapFiles;
@@ -48,6 +59,10 @@ extern "C"
     extern void ResourcePackLoadPack(ResourcePack* p, const char* sFile, const char* sKey);
     extern void ResourcePackSavePack(ResourcePack* p, const char* sFile, const char* sKey);
     extern bool ResourcePackIsLoaded(ResourcePack* p);
+    extern char** ResourcePackListFiles(ResourcePack* p, int* numFiles);
+    extern void ResourcePackFreeStringArray(char** s, int numStrings);
+    extern ResultCode ResourcePackRemoveFile(ResourcePack* p, const char* sFile);
+    extern ResultCode ResourcePackRenameFile(ResourcePack* p, const char* src, const char* dest);
     extern ResourceBuffer* ResourcePackFileBufferGet(ResourcePack* p, const char* sFile);
     extern void ResourcePackFileBufferDispose(ResourceBuffer* b);
     extern uint32_t ResourcePackFileBufferGetSize(ResourceBuffer* b);

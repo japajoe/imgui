@@ -194,6 +194,59 @@ std::string ResourcePack::makeposix(const std::string& path)
     return o;
 };
 
+std::vector<std::string> ResourcePack::ListFiles()
+{
+    std::vector<std::string> listFiles;
+
+    if(Loaded())
+    {
+        for(auto &file : mapFiles)
+        {
+            listFiles.emplace_back(file.first);
+        }
+    }
+
+    return listFiles;
+}
+
+ResultCode ResourcePack::RemoveFile(const std::string &sFilename)
+{
+    if(!Loaded())
+    {
+        return ResultCode::FAIL;
+    }
+
+    if(FileExists(sFilename))
+    {
+        mapFiles.erase(sFilename);
+        
+        return ResultCode::OK;
+    }
+    
+    return ResultCode::NO_FILE;
+}
+
+ResultCode ResourcePack::RenameFile(const std::string &src, const std::string &dest)
+{
+    if(!Loaded())
+    {
+        return ResultCode::FAIL;
+    }
+
+    // if source exists and destination does not exist, let's move it
+    if(FileExists(src) && !FileExists(dest))
+    {
+        mapFiles[dest] = mapFiles[src];
+        mapFiles.erase(src);
+        
+        return ResultCode::OK;
+    }
+
+    return ResultCode::NO_FILE;
+}
+
+
+
 extern "C" ResourcePack* ResourcePackCreate()
 {
     ResourcePack* pack = new ResourcePack();
@@ -240,6 +293,62 @@ extern "C" bool ResourcePackIsLoaded(ResourcePack* p)
         return p->Loaded();
     }
     return false;
+}
+
+extern "C" char** ResourcePackListFiles(ResourcePack* p, int* numFiles)
+{
+    if(p != nullptr)
+    {
+        auto files = p->ListFiles();
+        
+        char** result = new char*[files.size()]; 
+
+        for(int i = 0; i < files.size(); ++i)
+        {            
+            char* s_cstr = new char[files[i].size()+1];            
+            strcpy(s_cstr, files[i].c_str());            
+            result[i] = s_cstr;
+        }
+        
+        *numFiles = static_cast<int>(files.size());
+        return result;
+    }
+
+    *numFiles = 0;
+    return nullptr;
+}
+
+extern "C" void ResourcePackFreeStringArray(char** s, int numStrings)
+{
+    if(s != nullptr)
+    {
+        for(int i = 0; i < numStrings; i++)
+        {
+            delete s[i];
+        }
+        delete[] s;
+        s = nullptr;
+    }
+}
+
+extern "C" ResultCode ResourcePackRemoveFile(ResourcePack* p, const char* sFile)
+{
+    if(p != nullptr)
+    {
+        return p->RemoveFile(sFile);
+    }
+
+    return ResultCode::FAIL;
+}
+
+extern "C" ResultCode ResourcePackRenameFile(ResourcePack* p, const char* src, const char* dest)
+{
+    if(p != nullptr)
+    {
+        return p->RenameFile(src, dest);
+    }
+
+    return ResultCode::FAIL;
 }
 
 extern "C" ResourceBuffer* ResourcePackFileBufferGet(ResourcePack* p, const char* sFile)
