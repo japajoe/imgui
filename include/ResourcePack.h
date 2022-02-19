@@ -40,6 +40,7 @@ public:
     bool LoadPack(const std::string& sFile, const std::string& sKey);
     bool SavePack(const std::string& sFile, const std::string& sKey);
     ResourceBuffer* GetFileBuffer(const std::string& sFile);
+    void GetFileOffset(const std::string& sFile, uint32_t* offset, uint32_t* size);
     bool Loaded();
     std::vector<std::string> ListFiles();	
 	ResultCode RemoveFile(const std::string &sFilename);
@@ -64,6 +65,7 @@ extern "C" IMGUI_API_EXPORT void ResourcePackFreeStringArray(char** s, int numSt
 extern "C" IMGUI_API_EXPORT ResultCode ResourcePackRemoveFile(ResourcePack* p, const char* sFile);
 extern "C" IMGUI_API_EXPORT ResultCode ResourcePackRenameFile(ResourcePack* p, const char* src, const char* dest);
 extern "C" IMGUI_API_EXPORT ResourceBuffer* ResourcePackFileBufferGet(ResourcePack* p, const char* sFile);
+extern "C" IMGUI_API_EXPORT void ResourcePackFileGetOffset(ResourcePack* p, const char* sFile, uint32_t* offset, uint32_t* size);
 extern "C" IMGUI_API_EXPORT bool ResourcePackFileExistsInMap(ResourcePack* p, const char* filename);
 extern "C" IMGUI_API_EXPORT void ResourcePackFileBufferDispose(ResourceBuffer* b);
 extern "C" IMGUI_API_EXPORT uint32_t ResourcePackFileBufferGetSize(ResourceBuffer* b);

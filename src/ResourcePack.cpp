@@ -19,7 +19,8 @@ long GetFileSize(const std::string& filepath)
 ResourceBuffer::ResourceBuffer(std::ifstream& ifs, uint32_t offset, uint32_t size)
 {
     vMemory.resize(size);
-    ifs.seekg(offset); ifs.read(vMemory.data(), vMemory.size());
+    ifs.seekg(offset); 
+    ifs.read(vMemory.data(), vMemory.size());
     setg(vMemory.data(), vMemory.data(), vMemory.data() + size);
 }
 
@@ -172,6 +173,12 @@ bool ResourcePack::SavePack(const std::string& sFile, const std::string& sKey)
 ResourceBuffer* ResourcePack::GetFileBuffer(const std::string& sFile)
 { 
     return new ResourceBuffer(baseFile, mapFiles[sFile].nOffset, mapFiles[sFile].nSize);
+}
+
+void ResourcePack::GetFileOffset(const std::string& sFile, uint32_t* offset, uint32_t* size)
+{
+    *offset = mapFiles[sFile].nOffset;
+    *size = mapFiles[sFile].nSize;
 }
 
 bool ResourcePack::Loaded()
@@ -391,6 +398,14 @@ ResourceBuffer* ResourcePackFileBufferGet(ResourcePack* p, const char* sFile)
     }
 
     return nullptr;
+}
+
+void ResourcePackFileGetOffset(ResourcePack* p, const char* sFile, uint32_t* offset, uint32_t* size)
+{
+    if(p != nullptr)
+    {
+        p->GetFileOffset(sFile, offset, size);
+    }
 }
 
 void ResourcePackFileBufferDispose(ResourceBuffer* b)
