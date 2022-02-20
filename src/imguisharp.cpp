@@ -65,6 +65,30 @@ void ImGui_DestroyContext()
     ImGui::DestroyContext();
 }
 
+void ImGuiDebugStuff()
+{
+    std::cout << "ImFontConfig size: " << sizeof(ImFontConfig) << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, FontData) << ")] FontData" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, FontDataSize) << ")] FontDataSize" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, FontDataOwnedByAtlas) << ")] FontDataOwnedByAtlas" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, FontNo) << ")] FontNo" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, SizePixels) << ")] SizePixels" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, OversampleH) << ")] OversampleH" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, OversampleV) << ")] OversampleV" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, PixelSnapH) << ")] PixelSnapH" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, GlyphExtraSpacing) << ")] GlyphExtraSpacing" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, GlyphOffset) << ")] GlyphOffset" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, GlyphRanges) << ")] GlyphRanges" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, GlyphMinAdvanceX) << ")] GlyphMinAdvanceX" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, GlyphMaxAdvanceX) << ")] GlyphMaxAdvanceX" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, MergeMode) << ")] MergeMode" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, RasterizerFlags) << ")] RasterizerFlags" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, RasterizerMultiply) << ")] RasterizerMultiply" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, EllipsisChar) << ")] EllipsisChar" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, Name) << ")] Name" << std::endl;
+    std::cout << "[FieldOffset(" << offsetof(ImFontConfig, DstFont) << ")] DstFont" << std::endl;
+}
+
 bool ImGuiBegin(const char* id, bool* active, ImGuiWindowFlags flags)
 {
     return ImGui::Begin(id, active, flags);
@@ -145,9 +169,9 @@ bool ImGuiImageButton(int textureId, const ImVec2& size, const ImVec2& uv0, cons
     return ImGui::ImageButton((void*)(intptr_t)textureId, size, uv0, uv1, frame_padding, bg_col, tint_col);
 }
 
-bool ImGuiSliderFloat(const char* label, float* value, float v_min, float v_max, const char* format, float power)
-{
-    return ImGui::SliderFloat(label, value, v_min, v_max, format, power);
+bool ImGuiSliderFloat(const char* label, float* value, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+{    
+    return ImGui::SliderFloat(label, value, v_min, v_max, format, flags);
 }
 
 bool ImGuiInputFloat(const char* label, float* value, float step, float step_fast, const char* format, ImGuiInputTextFlags flags)
@@ -431,6 +455,15 @@ ImFont* ImGuiAddFontFromFileTTF(const char* filepath, float sizePixels)
 {
     ImGuiIO& io = ImGui::GetIO();
     ImFont* pFont = io.Fonts->AddFontFromFileTTF(filepath, sizePixels);    
+    return pFont;
+}
+
+ImFont* ImGuiAddFontFromMemoryTTF(void* font_data, int font_size, float size_pixels)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    ImFontConfig font_cfg;
+    font_cfg.FontDataOwnedByAtlas = false;
+    ImFont* pFont = io.Fonts->AddFontFromMemoryTTF(font_data, font_size, size_pixels, &font_cfg);
     return pFont;
 }
 

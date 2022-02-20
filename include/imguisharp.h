@@ -22,6 +22,8 @@ extern "C" IMGUI_API_EXPORT void ImGui_NewFrame();
 extern "C" IMGUI_API_EXPORT void ImGui_Render();
 extern "C" IMGUI_API_EXPORT void ImGui_DestroyContext();
 
+extern "C" IMGUI_API_EXPORT void ImGuiDebugStuff();
+
 extern "C" IMGUI_API_EXPORT bool ImGuiBegin(const char* id, bool* active, ImGuiWindowFlags flags);
 extern "C" IMGUI_API_EXPORT void ImGuiEnd();
 extern "C" IMGUI_API_EXPORT void ImGuiSetNextWindowPos(float x, float y);
@@ -40,7 +42,7 @@ extern "C" IMGUI_API_EXPORT bool ImGuiCheckbox(const char* text, bool* value);
 extern "C" IMGUI_API_EXPORT void ImGuiText(const char* text);
 extern "C" IMGUI_API_EXPORT bool ImGuiButton(const char* text, const ImVec2& rect);
 extern "C" IMGUI_API_EXPORT bool ImGuiImageButton(int textureId, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_col);
-extern "C" IMGUI_API_EXPORT bool ImGuiSliderFloat(const char* label, float* value, float v_min, float v_max, const char* format, float power);
+extern "C" IMGUI_API_EXPORT bool ImGuiSliderFloat(const char* label, float* value, float v_min, float v_max, const char* format, ImGuiSliderFlags flags);
 extern "C" IMGUI_API_EXPORT bool ImGuiInputFloat(const char* label, float* value, float step, float step_fast, const char* format, ImGuiInputTextFlags flags);
 extern "C" IMGUI_API_EXPORT bool ImGuiInputFloat2(const char* label, float* value, int decimal_precision, ImGuiInputTextFlags flags);
 extern "C" IMGUI_API_EXPORT bool ImGuiInputFloat3(const char* label, float* value, int decimal_precision, ImGuiInputTextFlags flags);
@@ -94,6 +96,7 @@ extern "C" IMGUI_API_EXPORT void ImGuiGetStyle(ImGuiStyle* style);
 extern "C" IMGUI_API_EXPORT void ImGuiSetIO(const ImGuiIO& io);
 extern "C" IMGUI_API_EXPORT void ImGuiGetIO(ImGuiIO* io);
 extern "C" IMGUI_API_EXPORT ImFont* ImGuiAddFontFromFileTTF(const char* filepath, float sizePixels);
+extern "C" IMGUI_API_EXPORT ImFont* ImGuiAddFontFromMemoryTTF(void* font_data, int font_size, float size_pixels);
 
 extern "C" IMGUI_API_EXPORT ConsoleApp* ImGuiConsoleAppCreate();
 extern "C" IMGUI_API_EXPORT void ImGuiConsoleAppDispose(ConsoleApp* app);
